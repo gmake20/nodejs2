@@ -11,11 +11,12 @@ import { BlogService } from "./blog.service";
 
 @Controller("blog") 
 export class BlogController {
-    blogService: BlogService;
+    // blogService: BlogService;
 
-    constructor() {
-        this.blogService = new BlogService();
-    }
+    // constructor() {
+    //     this.blogService = new BlogService();
+    // }
+    constructor(private blogService: BlogService) {}
 
     @Get() // 3 GET 요청 처리
     getAllPosts() {
