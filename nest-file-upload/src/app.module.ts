@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ChatGateway } from './app.gateway';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 
@@ -12,6 +13,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ChatGateway],
 })
 export class AppModule {}

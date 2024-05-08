@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Simple Nest Chat</title>
+  </head>
+  <body>
+    <script  src="https://code.jquery.com/jquery-3.6.1.slim.js"></script>
+    <h2>Simple Nest Chat</h2>
+    <div id="chat"></div>
+
+
+    <table><tr>
+      <td>
+        <input type="text" id="message" size=40 placeholder="메시지를 입력해주세요.">
+        <button onclick="sendMessage()">전송</button>    
+      </td>
+      <td></tr><tr></td>
+      <td>
+        <form id="myForm" action="file-upload" method="post" enctype="multipart/form-data">
+          <input type="file" name="file"  />
+          <button type="button" onclick="submitForm()">File Upload</button>
+        </form>     
+      </td>
+    </tr></table>
+
+
+  </body>
+  <script  src="https://code.jquery.com/jquery-3.6.1.slim.js"></script>
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io('http://localhost:3000');
+    
+    socket.on('connect', () => {      
+      console.log('connected');
+    });
+
+    function sendMessage() {
+      const message = $('#message').val();
+      socket.emit('message', message);
+    }
+
+    socket.on('message', (message) => {
+      $('#chat').append(`<div>${message}</div>`);
+    });
+
+
+    function sendImage(str) {
+      socket.emit('img', str);
+    }
+
+    socket.on('img', (str) => {
+      arr = str.split(" : ");
+      $('#chat').append(`<div>${arr[0]} : <img src="${arr[1]}"></div>`);
+    });
+
+
+
+  function submitForm() {
+      var formData = new FormData(document.getElementById("myForm"));
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "file-upload", true); // POST 방식으로 process.php에 요청
+
+      xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+              console.log(xhr);
+              if (xhr.status === 200 || xhr.status === 201) {
+                  message = xhr.response;
+                  sendImage(message);
+                  // $('#chat').append(`<div><img src="${message}"></div>`);
+              } else {
+                  alert("Form submission failed!");
+              }
+          }
+      };
+
+      xhr.send(formData);
+  }
+</script>
+
+
+</html> 

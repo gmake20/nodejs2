@@ -1,0 +1,33 @@
+<html>
+    <body>
+        <script  src="https://code.jquery.com/jquery-3.6.1.slim.js"></script>
+        <div id="chat"></div>
+        <form id="myForm" action="file-upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" />
+            <button type="button" onclick="submitForm()">Submit</button>
+        </form> 
+    </body>
+</html>
+
+<script>
+    function submitForm() {
+        var formData = new FormData(document.getElementById("myForm"));
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "file-upload", true); // POST 방식으로 process.php에 요청
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                console.log(xhr);
+                if (xhr.status === 200 || xhr.status === 201) {
+                    message = xhr.response;
+                    $('#chat').append(`<div><img src="${message}"></div>`);
+                } else {
+                    alert("Form submission failed!");
+                }
+            }
+        };
+
+        xhr.send(formData);
+    }
+</script>
